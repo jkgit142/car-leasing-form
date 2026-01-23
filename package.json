@@ -10,7 +10,6 @@
   "dependencies": {
     "next": "14.0.0",
     "react": "^18",
-    "react-dom": "^18",
-    "pg": "^8.11.3"
+    "react-dom": "^18"
   }
 }

@@ -49,38 +49,19 @@ export default function CarLeasingForm() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('/api/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        alert('ส่งใบสมัครเรียบร้อยแล้ว!');
-        // รีเซ็ตฟอร์ม
-        setFormData({
-          firstName: '', lastName: '', dateOfBirth: '', ssn: '', phone: '', email: '',
-          address: '', city: '', state: '', zipCode: '',
-          employer: '', jobTitle: '', employmentLength: '', annualIncome: '',
-          vehicleMake: '', vehicleModel: '', vehicleYear: '', vehiclePrice: '', downPayment: '', leaseTerm: '',
-          monthlyRent: '', otherIncome: '', monthlyDebts: '',
-          reference1Name: '', reference1Phone: '', reference2Name: '', reference2Phone: ''
-        });
-      } else {
-        alert('เกิดข้อผิดพลาด: ' + result.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('เกิดข้อผิดพลาดในการส่งข้อมูล');
-    }
+    console.log('Form submitted:', formData);
+    alert('ส่งใบสมัครเรียบร้อยแล้ว!');
+    // รีเซ็ตฟอร์ม
+    setFormData({
+      firstName: '', lastName: '', dateOfBirth: '', ssn: '', phone: '', email: '',
+      address: '', city: '', state: '', zipCode: '',
+      employer: '', jobTitle: '', employmentLength: '', annualIncome: '',
+      vehicleMake: '', vehicleModel: '', vehicleYear: '', vehiclePrice: '', downPayment: '', leaseTerm: '',
+      monthlyRent: '', otherIncome: '', monthlyDebts: '',
+      reference1Name: '', reference1Phone: '', reference2Name: '', reference2Phone: ''
+    });
   };
 
   return (
