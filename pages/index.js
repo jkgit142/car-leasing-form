@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { config } from '../config/app.js';
 
 export default function CarLeasingForm() {
   const [formData, setFormData] = useState({
@@ -49,19 +50,38 @@ export default function CarLeasingForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('ส่งใบสมัครเรียบร้อยแล้ว!');
-    // รีเซ็ตฟอร์ม
-    setFormData({
-      firstName: '', lastName: '', dateOfBirth: '', ssn: '', phone: '', email: '',
-      address: '', city: '', state: '', zipCode: '',
-      employer: '', jobTitle: '', employmentLength: '', annualIncome: '',
-      vehicleMake: '', vehicleModel: '', vehicleYear: '', vehiclePrice: '', downPayment: '', leaseTerm: '',
-      monthlyRent: '', otherIncome: '', monthlyDebts: '',
-      reference1Name: '', reference1Phone: '', reference2Name: '', reference2Phone: ''
-    });
+    
+    try {
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        alert(`${config.app.name} says\n${result.message}`);
+        // รีเซ็ตฟอร์ม
+        setFormData({
+          firstName: '', lastName: '', dateOfBirth: '', ssn: '', phone: '', email: '',
+          address: '', city: '', state: '', zipCode: '',
+          employer: '', jobTitle: '', employmentLength: '', annualIncome: '',
+          vehicleMake: '', vehicleModel: '', vehicleYear: '', vehiclePrice: '', downPayment: '', leaseTerm: '',
+          monthlyRent: '', otherIncome: '', monthlyDebts: '',
+          reference1Name: '', reference1Phone: '', reference2Name: '', reference2Phone: ''
+        });
+      } else {
+        alert(`${config.app.name} says\n${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert(`${config.app.name} says\n${config.form.errorMessage}`);
+    }
   };
 
   return (
@@ -103,7 +123,7 @@ export default function CarLeasingForm() {
           <section style={sectionStyle}>
             <h2 style={sectionHeaderStyle}>ข้อมูลการทำงาน</h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="employer" placeholder="ชื่อบริษัท *" value={formData.employer} onChange={handleChange} required style={inputStyle} />
+              <input name="employer" placeholder="ชื่อแผนก *" value={formData.employer} onChange={handleChange} required style={inputStyle} />
               <input name="jobTitle" placeholder="ตำแหน่งงาน *" value={formData.jobTitle} onChange={handleChange} required style={inputStyle} />
               <select name="employmentLength" value={formData.employmentLength} onChange={handleChange} required style={inputStyle}>
                 <option value="">อายุงาน *</option>
