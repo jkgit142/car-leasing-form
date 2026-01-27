@@ -22,12 +22,25 @@ export default function CarLeasingForm() {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/submit', {
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          spreadsheetId: config.googleSheets.spreadsheetId,
+          sheetName: config.googleSheets.sheetName,
+          data: [
+            '', // เลขที่
+            new Date().toLocaleString('th-TH'), // วันที่ส่ง
+            formData.fullName,
+            formData.phone,
+            formData.department,
+            formData.province,
+            formData.carModel,
+            formData.duration
+          ]
+        }),
       });
       
       const result = await response.json();
