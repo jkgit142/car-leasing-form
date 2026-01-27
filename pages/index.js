@@ -54,12 +54,27 @@ export default function CarLeasingForm() {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/submit', {
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          spreadsheetId: config.googleSheets.spreadsheetId,
+          sheetName: config.googleSheets.sheetName,
+          data: [
+            '', // เลขที่
+            new Date().toLocaleString('th-TH'), // วันที่ส่ง
+            formData.firstName, formData.lastName, formData.dateOfBirth, formData.ssn,
+            formData.phone, formData.email, formData.address, formData.city,
+            formData.state, formData.zipCode, formData.employer, formData.jobTitle,
+            formData.employmentLength, formData.annualIncome, formData.vehicleMake,
+            formData.vehicleModel, formData.vehicleYear, formData.vehiclePrice,
+            formData.downPayment, formData.leaseTerm, formData.monthlyRent,
+            formData.otherIncome, formData.monthlyDebts, formData.reference1Name,
+            formData.reference1Phone, formData.reference2Name, formData.reference2Phone
+          ]
+        }),
       });
       
       const result = await response.json();
@@ -101,7 +116,10 @@ export default function CarLeasingForm() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
               <input name="firstName" placeholder="ชื่อ *" value={formData.firstName} onChange={handleChange} required style={inputStyle} />
               <input name="lastName" placeholder="นามสกุล *" value={formData.lastName} onChange={handleChange} required style={inputStyle} />
-              <input name="dateOfBirth" type="date" placeholder="วันเกิด *" value={formData.dateOfBirth} onChange={handleChange} required style={inputStyle} />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label style={{ fontSize: '14px', color: '#007799', marginBottom: '5px' }}>วันเกิด *</label>
+              <input name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} required style={inputStyle} />
+            </div>
               <input name="ssn" placeholder="เลขบัตรประชาชน *" value={formData.ssn} onChange={handleChange} required style={inputStyle} />
               <input name="phone" type="tel" placeholder="เบอร์โทรศัพท์ *" value={formData.phone} onChange={handleChange} required style={inputStyle} />
               <input name="email" type="email" placeholder="อีเมล *" value={formData.email} onChange={handleChange} required style={inputStyle} />
