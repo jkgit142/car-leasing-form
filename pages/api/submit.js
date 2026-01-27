@@ -12,33 +12,12 @@ export default async function handler(req, res) {
     const rowData = [
       '', // เลขที่ (running no) - จะถูกสร้างใน Google Apps Script
       new Date().toLocaleString('th-TH'), // วันที่ส่ง
-      formData.firstName,
-      formData.lastName,
-      formData.dateOfBirth,
-      formData.ssn,
+      formData.fullName,
       formData.phone,
-      formData.email,
-      formData.address,
-      formData.city,
-      formData.state,
-      formData.zipCode,
-      formData.employer,
-      formData.jobTitle,
-      formData.employmentLength,
-      formData.annualIncome,
-      formData.vehicleMake,
-      formData.vehicleModel,
-      formData.vehicleYear,
-      formData.vehiclePrice,
-      formData.downPayment,
-      formData.leaseTerm,
-      formData.monthlyRent,
-      formData.otherIncome,
-      formData.monthlyDebts,
-      formData.reference1Name,
-      formData.reference1Phone,
-      formData.reference2Name,
-      formData.reference2Phone
+      formData.department,
+      formData.province,
+      formData.carModel,
+      formData.duration
     ];
 
     // ส่งข้อมูลไป Google Sheets ผ่าน Google Apps Script Web App

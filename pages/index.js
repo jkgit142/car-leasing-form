@@ -3,44 +3,12 @@ import { config } from '../config/app.js';
 
 export default function CarLeasingForm() {
   const [formData, setFormData] = useState({
-    // Personal Information
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
-    ssn: '',
+    fullName: '',
     phone: '',
-    email: '',
-    
-    // Address
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    
-    // Employment
-    employer: '',
-    jobTitle: '',
-    employmentLength: '',
-    annualIncome: '',
-    
-    // Vehicle Information
-    vehicleMake: '',
-    vehicleModel: '',
-    vehicleYear: '',
-    vehiclePrice: '',
-    downPayment: '',
-    leaseTerm: '',
-    
-    // Financial
-    monthlyRent: '',
-    otherIncome: '',
-    monthlyDebts: '',
-    
-    // References
-    reference1Name: '',
-    reference1Phone: '',
-    reference2Name: '',
-    reference2Phone: ''
+    department: '',
+    province: '',
+    carModel: '',
+    duration: ''
   });
 
   const handleChange = (e) => {
@@ -68,12 +36,12 @@ export default function CarLeasingForm() {
         alert(`${config.app.name} says\n${result.message}`);
         // รีเซ็ตฟอร์ม
         setFormData({
-          firstName: '', lastName: '', dateOfBirth: '', ssn: '', phone: '', email: '',
-          address: '', city: '', state: '', zipCode: '',
-          employer: '', jobTitle: '', employmentLength: '', annualIncome: '',
-          vehicleMake: '', vehicleModel: '', vehicleYear: '', vehiclePrice: '', downPayment: '', leaseTerm: '',
-          monthlyRent: '', otherIncome: '', monthlyDebts: '',
-          reference1Name: '', reference1Phone: '', reference2Name: '', reference2Phone: ''
+          fullName: '',
+          phone: '',
+          department: '',
+          province: '',
+          carModel: '',
+          duration: ''
         });
       } else {
         alert(`${config.app.name} says\n${result.message}`);
@@ -95,86 +63,22 @@ export default function CarLeasingForm() {
         </div>
         
         <form onSubmit={handleSubmit}>
-          {/* Personal Information */}
+          {/* ข้อมูลใบสมัคร */}
           <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>ข้อมูลส่วนตัว</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="firstName" placeholder="ชื่อ *" value={formData.firstName} onChange={handleChange} required style={inputStyle} />
-              <input name="lastName" placeholder="นามสกุล *" value={formData.lastName} onChange={handleChange} required style={inputStyle} />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <label style={{ fontSize: '14px', color: '#007799', marginBottom: '5px' }}>วันเกิด *</label>
-              <input name="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={handleChange} required style={inputStyle} />
-            </div>
-              <input name="ssn" placeholder="เลขบัตรประชาชน *" value={formData.ssn} onChange={handleChange} required style={inputStyle} />
+            <h2 style={sectionHeaderStyle}>ข้อมูลใบสมัคร</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px', marginTop: '20px' }}>
+              <input name="fullName" placeholder="ชื่อ-สกุล *" value={formData.fullName} onChange={handleChange} required style={inputStyle} />
               <input name="phone" type="tel" placeholder="เบอร์โทรศัพท์ *" value={formData.phone} onChange={handleChange} required style={inputStyle} />
-              <input name="email" type="email" placeholder="อีเมล *" value={formData.email} onChange={handleChange} required style={inputStyle} />
-            </div>
-          </section>
-
-          {/* Address */}
-          <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>ที่อยู่</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="address" placeholder="ที่อยู่ *" value={formData.address} onChange={handleChange} required style={inputStyle} />
-              <input name="city" placeholder="เมือง *" value={formData.city} onChange={handleChange} required style={inputStyle} />
-              <input name="state" placeholder="จังหวัด *" value={formData.state} onChange={handleChange} required style={inputStyle} />
-              <input name="zipCode" placeholder="รหัสไปรษณีย์ *" value={formData.zipCode} onChange={handleChange} required style={inputStyle} />
-            </div>
-          </section>
-
-          {/* Employment */}
-          <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>ข้อมูลการทำงาน</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="employer" placeholder="ชื่อแผนก *" value={formData.employer} onChange={handleChange} required style={inputStyle} />
-              <input name="jobTitle" placeholder="ตำแหน่งงาน *" value={formData.jobTitle} onChange={handleChange} required style={inputStyle} />
-              <select name="employmentLength" value={formData.employmentLength} onChange={handleChange} required style={inputStyle}>
-                <option value="">อายุงาน *</option>
-                <option value="less-than-1">น้อยกว่า 1 ปี</option>
-                <option value="1-2">1-2 ปี</option>
-                <option value="2-5">2-5 ปี</option>
-                <option value="5-plus">มากกว่า 5 ปี</option>
+              <input name="department" placeholder="สังกัด *" value={formData.department} onChange={handleChange} required style={inputStyle} />
+              <input name="province" placeholder="จังหวัด *" value={formData.province} onChange={handleChange} required style={inputStyle} />
+              <input name="carModel" placeholder="รุ่นรถ *" value={formData.carModel} onChange={handleChange} required style={inputStyle} />
+              <select name="duration" value={formData.duration} onChange={handleChange} required style={inputStyle}>
+                <option value="">ระยะเวลา *</option>
+                <option value="5">5 ปี</option>
+                <option value="10">10 ปี</option>
+                <option value="15">15 ปี</option>
+                <option value="20">20 ปี</option>
               </select>
-              <input name="annualIncome" type="number" placeholder="รายได้ต่อปี *" value={formData.annualIncome} onChange={handleChange} required style={inputStyle} />
-            </div>
-          </section>
-
-          {/* Vehicle Information */}
-          <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>ข้อมูลรถยนต์</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="vehicleMake" placeholder="ยี่ห้อรถ *" value={formData.vehicleMake} onChange={handleChange} required style={inputStyle} />
-              <input name="vehicleModel" placeholder="รุ่นรถ *" value={formData.vehicleModel} onChange={handleChange} required style={inputStyle} />
-              <input name="vehicleYear" type="number" placeholder="ปี *" value={formData.vehicleYear} onChange={handleChange} required style={inputStyle} />
-              <input name="vehiclePrice" type="number" placeholder="ราคารถ *" value={formData.vehiclePrice} onChange={handleChange} required style={inputStyle} />
-              <input name="downPayment" type="number" placeholder="เงินดาวน์ *" value={formData.downPayment} onChange={handleChange} required style={inputStyle} />
-              <select name="leaseTerm" value={formData.leaseTerm} onChange={handleChange} required style={inputStyle}>
-                <option value="">ระยะเวลาเช่า *</option>
-                <option value="24">24 เดือน</option>
-                <option value="36">36 เดือน</option>
-                <option value="48">48 เดือน</option>
-              </select>
-            </div>
-          </section>
-
-          {/* Financial Information */}
-          <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>ข้อมูลทางการเงิน</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="monthlyRent" type="number" placeholder="ค่าเช่า/ผ่อนบ้านต่อเดือน" value={formData.monthlyRent} onChange={handleChange} style={inputStyle} />
-              <input name="otherIncome" type="number" placeholder="รายได้อื่นต่อเดือน" value={formData.otherIncome} onChange={handleChange} style={inputStyle} />
-              <input name="monthlyDebts" type="number" placeholder="หนี้สินต่อเดือน" value={formData.monthlyDebts} onChange={handleChange} style={inputStyle} />
-            </div>
-          </section>
-
-          {/* References */}
-          <section style={sectionStyle}>
-            <h2 style={sectionHeaderStyle}>บุคคลอ้างอิง</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
-              <input name="reference1Name" placeholder="ชื่อบุคคลอ้างอิง 1" value={formData.reference1Name} onChange={handleChange} style={inputStyle} />
-              <input name="reference1Phone" type="tel" placeholder="เบอร์โทรบุคคลอ้างอิง 1" value={formData.reference1Phone} onChange={handleChange} style={inputStyle} />
-              <input name="reference2Name" placeholder="ชื่อบุคคลอ้างอิง 2" value={formData.reference2Name} onChange={handleChange} style={inputStyle} />
-              <input name="reference2Phone" type="tel" placeholder="เบอร์โทรบุคคลอ้างอิง 2" value={formData.reference2Phone} onChange={handleChange} style={inputStyle} />
             </div>
           </section>
 
@@ -193,7 +97,7 @@ export default function CarLeasingForm() {
             transition: 'all 0.3s ease',
             letterSpacing: '0.5px'
           }}>
-ส่งใบสมัคร
+            ส่งใบสมัคร
           </button>
         </form>
       </div>
