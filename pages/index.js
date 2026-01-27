@@ -54,27 +54,12 @@ export default function CarLeasingForm() {
     e.preventDefault();
     
     try {
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec`, {
+      const response = await fetch('/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          spreadsheetId: config.googleSheets.spreadsheetId,
-          sheetName: config.googleSheets.sheetName,
-          data: [
-            '', // เลขที่
-            new Date().toLocaleString('th-TH'), // วันที่ส่ง
-            formData.firstName, formData.lastName, formData.dateOfBirth, formData.ssn,
-            formData.phone, formData.email, formData.address, formData.city,
-            formData.state, formData.zipCode, formData.employer, formData.jobTitle,
-            formData.employmentLength, formData.annualIncome, formData.vehicleMake,
-            formData.vehicleModel, formData.vehicleYear, formData.vehiclePrice,
-            formData.downPayment, formData.leaseTerm, formData.monthlyRent,
-            formData.otherIncome, formData.monthlyDebts, formData.reference1Name,
-            formData.reference1Phone, formData.reference2Name, formData.reference2Phone
-          ]
-        }),
+        body: JSON.stringify(formData),
       });
       
       const result = await response.json();
