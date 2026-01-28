@@ -15,16 +15,10 @@ export default function CarLeasingForm() {
   const [groupedProducts, setGroupedProducts] = useState({});
 
   useEffect(() => {
-    console.time('⏱️ Total page load');
-    console.log('🚀 Component mounted');
     fetchProducts();
   }, []);
   
   const fetchProducts = async () => {
-    console.time('📦 Products loading');
-    console.log('🚗 Starting to fetch products...');
-    
-    // Mock data ชั่วคราว - จะแก้เป็น API ภายหลัง
     const mockProducts = [
       {ID: 1, 'ยี่ห้อ': 'AION', 'รุ่น': 'V Luxury', 'ราคา': 899000},
       {ID: 2, 'ยี่ห้อ': 'AION', 'รุ่น': 'UT Premium', 'ราคา': 649000},
@@ -47,7 +41,6 @@ export default function CarLeasingForm() {
       {ID: 19, 'ยี่ห้อ': 'RIDDARA', 'รุ่น': 'RD6 63.9 kW 2WD', 'ราคา': 739000}
     ];
     
-    console.log('✅ Using mock data:', mockProducts.length, 'items');
     setProducts(mockProducts);
     
     const grouped = mockProducts.reduce((acc, product) => {
@@ -57,11 +50,7 @@ export default function CarLeasingForm() {
       return acc;
     }, {});
     
-    console.log('🏷️ Grouped by brands:', Object.keys(grouped));
     setGroupedProducts(grouped);
-    
-    console.timeEnd('📦 Products loading');
-    console.timeEnd('⏱️ Total page load');
   };
 
   const handleChange = (e) => {
@@ -100,7 +89,6 @@ export default function CarLeasingForm() {
       
       if (result.success) {
         alert(`${config.app.name} says\n${result.message}`);
-        // รีเซ็ตฟอร์ม
         setFormData({
           fullName: '',
           phone: '',
@@ -121,7 +109,6 @@ export default function CarLeasingForm() {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fffe 0%, #e8f7f5 100%)', fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
-        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px', background: 'white', padding: '30px', borderRadius: '15px', boxShadow: '0 8px 32px rgba(44, 163, 151, 0.1)' }}>
           <img src="./images/logo_MAIN.png" alt="Company Logo" style={{ height: '60px', marginBottom: '20px' }} onError={(e) => { e.target.style.display = 'none' }} />
           <h1 style={{ color: '#007799', fontSize: '32px', fontWeight: '700', margin: '0', letterSpacing: '-0.5px' }}>ใบสมัครเช่ารถยนต์</h1>
@@ -129,7 +116,6 @@ export default function CarLeasingForm() {
         </div>
         
         <form onSubmit={handleSubmit}>
-          {/* ข้อมูลใบสมัคร */}
           <section style={sectionStyle}>
             <h2 style={sectionHeaderStyle}>ข้อมูลใบสมัคร</h2>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px', marginTop: '20px' }}>
@@ -138,7 +124,6 @@ export default function CarLeasingForm() {
               <input name="department" placeholder="สังกัด *" value={formData.department} onChange={handleChange} required style={inputStyle} />
               <input name="province" placeholder="จังหวัด *" value={formData.province} onChange={handleChange} required style={inputStyle} />
               
-              {/* Product Selection */}
               <div style={{ marginTop: '10px' }}>
                 <label style={{ fontSize: '14px', color: '#007799', marginBottom: '10px', display: 'block' }}>เลือกรุ่นรถ *</label>
                 {Object.keys(groupedProducts).length === 0 ? (
