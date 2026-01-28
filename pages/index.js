@@ -80,6 +80,7 @@ export default function CarLeasingForm() {
         timestamp: new Date().toLocaleString('th-TH')
       });
       
+      // ใช้ URL ใหม่จาก deployment ล่าสุด
       const url = `https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?${params}`;
       console.log('Sending request to:', url);
       
