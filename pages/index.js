@@ -20,13 +20,14 @@ export default function CarLeasingForm() {
   
   const fetchProducts = async () => {
     try {
-      const response = await fetch('/api/products');
-      const result = await response.json();
+      // ดึงข้อมูล products จาก Google Sheets โดยตรง
+      const productsResponse = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`);
+      const productsResult = await productsResponse.json();
       
-      if (result.success) {
-        setProducts(result.products);
+      if (productsResult.success) {
+        setProducts(productsResult.products);
         
-        const grouped = result.products.reduce((acc, product) => {
+        const grouped = productsResult.products.reduce((acc, product) => {
           const brand = product['ยี่ห้อ'];
           if (!acc[brand]) acc[brand] = [];
           acc[brand].push(product);
@@ -66,7 +67,7 @@ export default function CarLeasingForm() {
             formData.phone,
             formData.department,
             formData.province,
-            formData.carModel,
+            formData.selectedProduct,
             formData.duration
           ]
         }),
@@ -99,7 +100,7 @@ export default function CarLeasingForm() {
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '40px', background: 'white', padding: '30px', borderRadius: '15px', boxShadow: '0 8px 32px rgba(44, 163, 151, 0.1)' }}>
-          <img src="/logo.png" alt="Company Logo" style={{ height: '60px', marginBottom: '20px' }} onError={(e) => { e.target.style.display = 'none' }} />
+          <img src="./images/logo_MAIN.png" alt="Company Logo" style={{ height: '60px', marginBottom: '20px' }} onError={(e) => { e.target.style.display = 'none' }} />
           <h1 style={{ color: '#007799', fontSize: '32px', fontWeight: '700', margin: '0', letterSpacing: '-0.5px' }}>ใบสมัครเช่ารถยนต์</h1>
           <p style={{ color: '#666', fontSize: '16px', margin: '10px 0 0 0' }}>กรอกใบสมัครให้เสร็จภายในไม่กี่นาที</p>
         </div>

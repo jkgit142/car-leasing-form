@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       formData.phone,
       formData.department,
       formData.province,
-      formData.carModel,
+      formData.selectedProduct,
       formData.duration
     ];
 
