@@ -20,6 +20,9 @@ export default function CarLeasingForm() {
   
   const fetchProducts = async () => {
     console.log('🚗 Starting to fetch products...');
+    console.log('📄 Config:', config);
+    console.log('📊 SpreadsheetId:', config.googleSheets.spreadsheetId);
+    
     try {
       const url = `https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`;
       console.log('📡 Fetching from URL:', url);
