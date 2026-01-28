@@ -6,21 +6,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const formData = req.body;
+    const { data } = req.body;
     
-    // สร้าง array ของข้อมูลตามลำดับ column ใน Google Sheets
-    const rowData = [
-      '', // เลขที่ (running no) - จะถูกสร้างใน Google Apps Script
-      new Date().toLocaleString('th-TH'), // วันที่ส่ง
-      formData.fullName,
-      formData.phone,
-      formData.department,
-      formData.province,
-      formData.selectedProduct,
-      formData.duration
-    ];
-
-    // ส่งข้อมูลไป Google Sheets ผ่าน Google Apps Script Web App
     const response = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec`, {
       method: 'POST',
       headers: {
@@ -28,24 +15,23 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         spreadsheetId: config.googleSheets.spreadsheetId,
-        sheetName: config.googleSheets.sheetName,
-        data: rowData
+        sheetName: 'registration',
+        data: data
       })
     });
 
-    if (response.ok) {
-      res.status(200).json({ 
-        success: true, 
-        message: config.form.successMessage 
-      });
+    const result = await response.json();
+    
+    if (response.ok && result.success) {
+      res.status(200).json(result);
     } else {
-      throw new Error('Failed to save to Google Sheets');
+      res.status(500).json({ success: false, message: result.message || 'เกิดข้อผิดพลาด' });
     }
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ 
       success: false, 
-      message: config.form.errorMessage 
+      message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' 
     });
   }
 }
