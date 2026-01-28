@@ -1,6 +1,44 @@
 // Google Apps Script สำหรับเขียนข้อมูลลง Google Sheets
 // คัดลอกโค้ดนี้ไปใส่ใน Google Apps Script
 
+// Function สำหรับ clear และ setup sheet ใหม่
+function clearAndSetupSheet() {
+  try {
+    console.log('Starting clearAndSetupSheet function');
+    
+    const spreadsheetId = '1BiNsKA5IxFKqzvd3QxFI_aUsX-uDGf-xq7LxR62UPhA';
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    let sheet = spreadsheet.getSheetByName('registration');
+    
+    // ถ้าไม่มี sheet ให้สร้างใหม่
+    if (!sheet) {
+      console.log('Creating new sheet');
+      sheet = spreadsheet.insertSheet('registration');
+    } else {
+      console.log('Sheet exists, clearing content');
+      // Clear ข้อมูลทั้งหมด
+      sheet.clear();
+    }
+    
+    // เขียน header ใหม่
+    const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อ-สกุล', 'เบอร์โทร', 'สังกัด', 'จังหวัด', 'รุ่นรถ', 'ระยะเวลา'];
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    
+    // จัดรูปแบบ header
+    const headerRange = sheet.getRange(1, 1, 1, headers.length);
+    headerRange.setBackground('#4CAF50');
+    headerRange.setFontColor('white');
+    headerRange.setFontWeight('bold');
+    
+    console.log('Sheet setup completed successfully');
+    return 'SUCCESS: Sheet cleared and headers added';
+    
+  } catch (error) {
+    console.error('Error in clearAndSetupSheet:', error);
+    return 'ERROR: ' + error.toString();
+  }
+}
+
 function doGet(e) {
   try {
     console.log('Starting doGet function');
@@ -24,7 +62,8 @@ function doGet(e) {
       console.log('Creating new sheet');
       sheet = spreadsheet.insertSheet('registration');
       // เพิ่ม header
-      sheet.getRange(1, 1, 1, 8).setValues([['ลำดับ', 'วันที่', 'ชื่อ-สกุล', 'เบอร์โทร', 'สังกัด', 'จังหวัด', 'รุ่นรถ', 'ระยะเวลา']]);
+      const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อ-สกุล', 'เบอร์โทร', 'สังกัด', 'จังหวัด', 'รุ่นรถ', 'ระยะเวลา'];
+      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       console.log('Header added');
     }
     
@@ -33,10 +72,25 @@ function doGet(e) {
     const runningNo = lastRow > 0 ? lastRow : 1;
     console.log('Running number:', runningNo, 'Last row:', lastRow);
     
+    // แยกวันที่และเวลา
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('th-TH');
+    const timeStr = now.toLocaleTimeString('th-TH');
+    
+    console.log('Date:', dateStr, 'Time:', timeStr);
+    console.log('Parameters details:');
+    console.log('- fullName:', params.fullName);
+    console.log('- phone:', params.phone);
+    console.log('- department:', params.department);
+    console.log('- province:', params.province);
+    console.log('- selectedProduct:', params.selectedProduct);
+    console.log('- duration:', params.duration);
+    
     // เพิ่มข้อมูลใหม่
     const rowData = [
       runningNo,
-      params.timestamp || new Date().toLocaleString('th-TH'),
+      dateStr,
+      timeStr,
       params.fullName || '',
       params.phone || '',
       params.department || '',
