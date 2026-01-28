@@ -19,10 +19,13 @@ export default function CarLeasingForm() {
   }, []);
   
   const fetchProducts = async () => {
+    console.log('Fetching products...');
     try {
       // ดึงข้อมูล products จาก Google Sheets โดยตรง
       const productsResponse = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`);
       const productsResult = await productsResponse.json();
+      
+      console.log('Products result:', productsResult);
       
       if (productsResult.success) {
         setProducts(productsResult.products);
@@ -34,6 +37,7 @@ export default function CarLeasingForm() {
           return acc;
         }, {});
         
+        console.log('Grouped products:', grouped);
         setGroupedProducts(grouped);
       }
     } catch (error) {
@@ -118,27 +122,31 @@ export default function CarLeasingForm() {
               {/* Product Selection */}
               <div style={{ marginTop: '10px' }}>
                 <label style={{ fontSize: '14px', color: '#007799', marginBottom: '10px', display: 'block' }}>เลือกรุ่นรถ *</label>
-                {Object.keys(groupedProducts).map(brand => (
-                  <div key={brand} style={brandCardStyle}>
-                    <div style={brandHeaderStyle}>
-                      <img src={`./images/logo_${brand}.png`} alt={brand} style={logoStyle} onError={(e) => { e.target.style.display = 'none' }} />
-                      <span style={{ fontSize: '18px', fontWeight: '600', color: '#007799' }}>{brand}</span>
+                {Object.keys(groupedProducts).length === 0 ? (
+                  <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>กำลังโหลดข้อมูลสินค้า...</div>
+                ) : (
+                  Object.keys(groupedProducts).map(brand => (
+                    <div key={brand} style={brandCardStyle}>
+                      <div style={brandHeaderStyle}>
+                        <img src={`./images/logo_${brand}.png`} alt={brand} style={logoStyle} onError={(e) => { e.target.style.display = 'none' }} />
+                        <span style={{ fontSize: '18px', fontWeight: '600', color: '#007799' }}>{brand}</span>
+                      </div>
+                      {groupedProducts[brand].map(product => (
+                        <label key={product.ID} style={productItemStyle}>
+                          <input 
+                            type="radio" 
+                            name="selectedProduct" 
+                            value={`${product['ยี่ห้อ']} ${product['รุ่น']}`}
+                            onChange={handleChange}
+                            style={{ marginRight: '10px' }}
+                          />
+                          <span style={{ flex: 1 }}>{product['รุ่น']}</span>
+                          <span style={{ fontWeight: '600', color: '#2ca397' }}>฿{Number(product['ราคา']).toLocaleString()}</span>
+                        </label>
+                      ))}
                     </div>
-                    {groupedProducts[brand].map(product => (
-                      <label key={product.ID} style={productItemStyle}>
-                        <input 
-                          type="radio" 
-                          name="selectedProduct" 
-                          value={`${product['ยี่ห้อ']} ${product['รุ่น']}`}
-                          onChange={handleChange}
-                          style={{ marginRight: '10px' }}
-                        />
-                        <span style={{ flex: 1 }}>{product['รุ่น']}</span>
-                        <span style={{ fontWeight: '600', color: '#2ca397' }}>฿{Number(product['ราคา']).toLocaleString()}</span>
-                      </label>
-                    ))}
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
               <select name="duration" value={formData.duration} onChange={handleChange} required style={inputStyle}>
                 <option value="">ระยะเวลา *</option>
