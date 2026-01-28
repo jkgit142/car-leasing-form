@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { config } from '../config/app.js';
 
 export default function CarLeasingForm() {
@@ -7,9 +7,38 @@ export default function CarLeasingForm() {
     phone: '',
     department: '',
     province: '',
-    carModel: '',
+    selectedProduct: '',
     duration: ''
   });
+  
+  const [products, setProducts] = useState([]);
+  const [groupedProducts, setGroupedProducts] = useState({});
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+  
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('/api/products');
+      const result = await response.json();
+      
+      if (result.success) {
+        setProducts(result.products);
+        
+        const grouped = result.products.reduce((acc, product) => {
+          const brand = product['ยี่ห้อ'];
+          if (!acc[brand]) acc[brand] = [];
+          acc[brand].push(product);
+          return acc;
+        }, {});
+        
+        setGroupedProducts(grouped);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -53,7 +82,7 @@ export default function CarLeasingForm() {
           phone: '',
           department: '',
           province: '',
-          carModel: '',
+          selectedProduct: '',
           duration: ''
         });
       } else {
@@ -84,7 +113,32 @@ export default function CarLeasingForm() {
               <input name="phone" type="tel" placeholder="เบอร์โทรศัพท์ *" value={formData.phone} onChange={handleChange} required style={inputStyle} />
               <input name="department" placeholder="สังกัด *" value={formData.department} onChange={handleChange} required style={inputStyle} />
               <input name="province" placeholder="จังหวัด *" value={formData.province} onChange={handleChange} required style={inputStyle} />
-              <input name="carModel" placeholder="รุ่นรถ *" value={formData.carModel} onChange={handleChange} required style={inputStyle} />
+              
+              {/* Product Selection */}
+              <div style={{ marginTop: '10px' }}>
+                <label style={{ fontSize: '14px', color: '#007799', marginBottom: '10px', display: 'block' }}>เลือกรุ่นรถ *</label>
+                {Object.keys(groupedProducts).map(brand => (
+                  <div key={brand} style={brandCardStyle}>
+                    <div style={brandHeaderStyle}>
+                      <img src={`./images/logo_${brand}.png`} alt={brand} style={logoStyle} onError={(e) => { e.target.style.display = 'none' }} />
+                      <span style={{ fontSize: '18px', fontWeight: '600', color: '#007799' }}>{brand}</span>
+                    </div>
+                    {groupedProducts[brand].map(product => (
+                      <label key={product.ID} style={productItemStyle}>
+                        <input 
+                          type="radio" 
+                          name="selectedProduct" 
+                          value={`${product['ยี่ห้อ']} ${product['รุ่น']}`}
+                          onChange={handleChange}
+                          style={{ marginRight: '10px' }}
+                        />
+                        <span style={{ flex: 1 }}>{product['รุ่น']}</span>
+                        <span style={{ fontWeight: '600', color: '#2ca397' }}>฿{Number(product['ราคา']).toLocaleString()}</span>
+                      </label>
+                    ))}
+                  </div>
+                ))}
+              </div>
               <select name="duration" value={formData.duration} onChange={handleChange} required style={inputStyle}>
                 <option value="">ระยะเวลา *</option>
                 <option value="5">5 ปี</option>
@@ -117,6 +171,38 @@ export default function CarLeasingForm() {
     </div>
   );
 }
+
+const brandCardStyle = {
+  background: 'white',
+  border: '2px solid #e1f5f3',
+  borderRadius: '12px',
+  marginBottom: '15px',
+  overflow: 'hidden'
+};
+
+const brandHeaderStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: '15px 20px',
+  background: 'linear-gradient(135deg, #f8fffe 0%, #e8f7f5 100%)',
+  borderBottom: '1px solid #e1f5f3',
+  gap: '15px'
+};
+
+const logoStyle = {
+  width: '40px',
+  height: '40px',
+  objectFit: 'contain'
+};
+
+const productItemStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: '12px 20px',
+  cursor: 'pointer',
+  borderBottom: '1px solid #f0f9f8',
+  transition: 'background-color 0.2s ease'
+};
 
 const inputStyle = {
   padding: '16px',
