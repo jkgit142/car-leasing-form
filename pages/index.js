@@ -20,38 +20,42 @@ export default function CarLeasingForm() {
   
   const fetchProducts = async () => {
     console.log('🚗 Starting to fetch products...');
-    console.log('📄 Config:', config);
-    console.log('📊 SpreadsheetId:', config.googleSheets.spreadsheetId);
     
-    try {
-      const url = `https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`;
-      console.log('📡 Fetching from URL:', url);
-      
-      const productsResponse = await fetch(url);
-      console.log('📥 Response status:', productsResponse.status);
-      
-      const productsResult = await productsResponse.json();
-      console.log('📊 Products result:', productsResult);
-      
-      if (productsResult.success) {
-        console.log('✅ Products loaded:', productsResult.products.length, 'items');
-        setProducts(productsResult.products);
-        
-        const grouped = productsResult.products.reduce((acc, product) => {
-          const brand = product['ยี่ห้อ'];
-          if (!acc[brand]) acc[brand] = [];
-          acc[brand].push(product);
-          return acc;
-        }, {});
-        
-        console.log('🏷️ Grouped by brands:', Object.keys(grouped));
-        setGroupedProducts(grouped);
-      } else {
-        console.log('❌ Failed to load products:', productsResult.message);
-      }
-    } catch (error) {
-      console.error('💥 Error fetching products:', error);
-    }
+    // Mock data ชั่วคราว - จะแก้เป็น API ภายหลัง
+    const mockProducts = [
+      {ID: 1, 'ยี่ห้อ': 'AION', 'รุ่น': 'V Luxury', 'ราคา': 899000},
+      {ID: 2, 'ยี่ห้อ': 'AION', 'รุ่น': 'UT Premium', 'ราคา': 649000},
+      {ID: 3, 'ยี่ห้อ': 'AION', 'รุ่น': 'UT Standard', 'ราคา': 549000},
+      {ID: 4, 'ยี่ห้อ': 'BYD', 'รุ่น': 'SEALION7 Premium', 'ราคา': 1264900},
+      {ID: 5, 'ยี่ห้อ': 'BYD', 'รุ่น': 'ATT03 Premium', 'ราคา': 799000},
+      {ID: 6, 'ยี่ห้อ': 'BYD', 'รุ่น': 'DOLPHIN Extended', 'ราคา': 719900},
+      {ID: 7, 'ยี่ห้อ': 'BYD', 'รุ่น': 'DOLPHIN Standard', 'ราคา': 599000},
+      {ID: 8, 'ยี่ห้อ': 'DEEPAL', 'รุ่น': 'S05 Max', 'ราคา': 899000},
+      {ID: 9, 'ยี่ห้อ': 'DEEPAL', 'รุ่น': 'S05 Plus', 'ราคา': 849000},
+      {ID: 10, 'ยี่ห้อ': 'GEELY', 'รุ่น': 'EX5 Max', 'ราคา': 849000},
+      {ID: 11, 'ยี่ห้อ': 'GEELY', 'รุ่น': 'V23 2WD Plus', 'ราคา': 689000},
+      {ID: 12, 'ยี่ห้อ': 'GEELY', 'รุ่น': 'V23 2WD Play', 'ราคา': 634900},
+      {ID: 13, 'ยี่ห้อ': 'GEELY', 'รุ่น': 'EX2 Pro', 'ราคา': 459990},
+      {ID: 14, 'ยี่ห้อ': 'GEELY', 'รุ่น': 'EX2 Max', 'ราคา': 459990},
+      {ID: 15, 'ยี่ห้อ': 'MG', 'รุ่น': 'MG S5D', 'ราคา': 679900},
+      {ID: 16, 'ยี่ห้อ': 'MG', 'รุ่น': 'MG 4D Long range', 'ราคา': 649000},
+      {ID: 17, 'ยี่ห้อ': 'MG', 'รุ่น': 'MIG3 Hybrid', 'ราคา': 619900},
+      {ID: 18, 'ยี่ห้อ': 'MG', 'รุ่น': 'MG 4D', 'ราคา': 549000},
+      {ID: 19, 'ยี่ห้อ': 'RIDDARA', 'รุ่น': 'RD6 63.9 kW 2WD', 'ราคา': 739000}
+    ];
+    
+    console.log('✅ Using mock data:', mockProducts.length, 'items');
+    setProducts(mockProducts);
+    
+    const grouped = mockProducts.reduce((acc, product) => {
+      const brand = product['ยี่ห้อ'];
+      if (!acc[brand]) acc[brand] = [];
+      acc[brand].push(product);
+      return acc;
+    }, {});
+    
+    console.log('🏷️ Grouped by brands:', Object.keys(grouped));
+    setGroupedProducts(grouped);
   };
 
   const handleChange = (e) => {
