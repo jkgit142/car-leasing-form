@@ -19,15 +19,19 @@ export default function CarLeasingForm() {
   }, []);
   
   const fetchProducts = async () => {
-    console.log('Fetching products...');
+    console.log('🚗 Starting to fetch products...');
     try {
-      // ดึงข้อมูล products จาก Google Sheets โดยตรง
-      const productsResponse = await fetch(`https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`);
-      const productsResult = await productsResponse.json();
+      const url = `https://script.google.com/macros/s/AKfycbzwmGDtQgd-kNVt_vgUzr2BTEV-kbl5-6ep9Jk5qgRhj1hG_EP80mkC8UnGOh4eJZ08/exec?action=getProducts&spreadsheetId=${config.googleSheets.spreadsheetId}&sheetName=products`;
+      console.log('📡 Fetching from URL:', url);
       
-      console.log('Products result:', productsResult);
+      const productsResponse = await fetch(url);
+      console.log('📥 Response status:', productsResponse.status);
+      
+      const productsResult = await productsResponse.json();
+      console.log('📊 Products result:', productsResult);
       
       if (productsResult.success) {
+        console.log('✅ Products loaded:', productsResult.products.length, 'items');
         setProducts(productsResult.products);
         
         const grouped = productsResult.products.reduce((acc, product) => {
@@ -37,11 +41,13 @@ export default function CarLeasingForm() {
           return acc;
         }, {});
         
-        console.log('Grouped products:', grouped);
+        console.log('🏷️ Grouped by brands:', Object.keys(grouped));
         setGroupedProducts(grouped);
+      } else {
+        console.log('❌ Failed to load products:', productsResult.message);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('💥 Error fetching products:', error);
     }
   };
 
