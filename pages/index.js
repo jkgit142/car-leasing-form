@@ -1,5 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { config } from '../config/app.js';
+
+// Lazy load heavy components
+const ProductSelector = dynamic(() => import('../components/ProductSelector'), {
+  loading: () => <div style={{ padding: '20px', textAlign: 'center' }}>กำลังโหลด...</div>,
+  ssr: false
+});
 
 export default function CarLeasingForm() {
   const [formData, setFormData] = useState({
@@ -15,10 +22,13 @@ export default function CarLeasingForm() {
   const [groupedProducts, setGroupedProducts] = useState({});
 
   useEffect(() => {
+    console.time('⏱️ Total page load');
+    console.log('🚀 Component mounted');
     fetchProducts();
   }, []);
   
   const fetchProducts = async () => {
+    console.time('📦 Products loading');
     console.log('🚗 Starting to fetch products...');
     
     // Mock data ชั่วคราว - จะแก้เป็น API ภายหลัง
@@ -56,6 +66,9 @@ export default function CarLeasingForm() {
     
     console.log('🏷️ Grouped by brands:', Object.keys(grouped));
     setGroupedProducts(grouped);
+    
+    console.timeEnd('📦 Products loading');
+    console.timeEnd('⏱️ Total page load');
   };
 
   const handleChange = (e) => {
@@ -132,35 +145,11 @@ export default function CarLeasingForm() {
               <input name="department" placeholder="สังกัด *" value={formData.department} onChange={handleChange} required style={inputStyle} />
               <input name="province" placeholder="จังหวัด *" value={formData.province} onChange={handleChange} required style={inputStyle} />
               
-              {/* Product Selection */}
-              <div style={{ marginTop: '10px' }}>
-                <label style={{ fontSize: '14px', color: '#007799', marginBottom: '10px', display: 'block' }}>เลือกรุ่นรถ *</label>
-                {Object.keys(groupedProducts).length === 0 ? (
-                  <div style={{ padding: '20px', textAlign: 'center', color: '#666' }}>กำลังโหลดข้อมูลสินค้า...</div>
-                ) : (
-                  Object.keys(groupedProducts).map(brand => (
-                    <div key={brand} style={brandCardStyle}>
-                      <div style={brandHeaderStyle}>
-                        <img src={`./images/logo_${brand}.png`} alt={brand} style={logoStyle} onError={(e) => { e.target.style.display = 'none' }} />
-                        <span style={{ fontSize: '18px', fontWeight: '600', color: '#007799' }}>{brand}</span>
-                      </div>
-                      {groupedProducts[brand].map(product => (
-                        <label key={product.ID} style={productItemStyle}>
-                          <input 
-                            type="radio" 
-                            name="selectedProduct" 
-                            value={`${product['ยี่ห้อ']} ${product['รุ่น']}`}
-                            onChange={handleChange}
-                            style={{ marginRight: '10px' }}
-                          />
-                          <span style={{ flex: 1 }}>{product['รุ่น']}</span>
-                          <span style={{ fontWeight: '600', color: '#2ca397' }}>฿{Number(product['ราคา']).toLocaleString()}</span>
-                        </label>
-                      ))}
-                    </div>
-                  ))
-                )}
-              </div>
+              <ProductSelector 
+                groupedProducts={groupedProducts}
+                selectedProduct={formData.selectedProduct}
+                onChange={handleChange}
+              />
               <select name="duration" value={formData.duration} onChange={handleChange} required style={inputStyle}>
                 <option value="">ระยะเวลา *</option>
                 <option value="5">5 ปี</option>

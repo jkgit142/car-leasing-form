@@ -1,11 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  trailingSlash: true,
-  images: {
-    unoptimized: true
+  compress: true,
+  poweredByHeader: false,
+  
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            maxSize: 200000,
+          },
+        },
+      };
+    }
+    return config;
   },
-  assetPrefix: '.'
-}
 
-module.exports = nextConfig
+  experimental: {
+    optimizeCss: true,
+  },
+};
+
+module.exports = nextConfig;
