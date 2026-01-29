@@ -119,9 +119,9 @@ export default function CarLeasingForm() {
       <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fffe 0%, #e8f7f5 100%)', fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' }}>
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 20px' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px', background: 'white', padding: '30px', borderRadius: '15px', boxShadow: '0 8px 32px rgba(44, 163, 151, 0.1)' }}>
-            <img src="./images/logo_MAIN.png" alt="Company Logo" style={{ height: '60px', marginBottom: '20px' }} onError={(e) => { e.target.style.display = 'none' }} />
-            <h1 style={{ color: '#007799', fontSize: '32px', fontWeight: '700', margin: '0', letterSpacing: '-0.5px' }}>ใบสมัครเช่ารถยนต์</h1>
-            <p style={{ color: '#666', fontSize: '16px', margin: '10px 0 0 0' }}>กรอกใบสมัครให้เสร็จภายในไม่กี่นาที</p>
+            <img src="./images/logo_MAIN.png" alt="Company Logo" style={{ height: '100px', marginBottom: '20px' }} onError={(e) => { e.target.style.display = 'none' }} />
+            <h1 style={{ color: '#007799', fontSize: '32px', fontWeight: '700', margin: '0', letterSpacing: '-0.5px' }}>ใบสมัครเข้าร่วมโครงการ</h1>
+            <p style={{ color: '#666', fontSize: '16px', margin: '10px 0 0 0' }}>ขอสินเชื่อเพื่อรถยนต์ไฟฟ้า</p>
           </div>
           
           <form onSubmit={handleSubmit}>
