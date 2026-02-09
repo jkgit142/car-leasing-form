@@ -5,15 +5,19 @@ import Head from 'next/head';
 export default function CarLeasingForm() {
   const [formData, setFormData] = useState({
     fullName: '',
-    phone: '',
+    employmentType: '',
+    position: '',
     department: '',
     province: '',
+    phone: '',
+    email: '',
     selectedProduct: '',
     duration: ''
   });
   
   const [groupedProducts, setGroupedProducts] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pdpaConsent, setPdpaConsent] = useState(false);
 
   useEffect(() => {
     const inputs = document.querySelectorAll('input[required], select[required]');
@@ -72,9 +76,12 @@ export default function CarLeasingForm() {
     try {
       const params = new URLSearchParams({
         fullName: formData.fullName,
-        phone: formData.phone,
+        employmentType: formData.employmentType,
+        position: formData.position,
         department: formData.department,
         province: formData.province,
+        phone: formData.phone,
+        email: formData.email,
         selectedProduct: formData.selectedProduct,
         duration: formData.duration,
         timestamp: new Date().toLocaleString('th-TH')
@@ -94,9 +101,12 @@ export default function CarLeasingForm() {
         alert(`${config.app.name} says\nบันทึกข้อมูลเรียบร้อยแล้ว!`);
         setFormData({
           fullName: '',
-          phone: '',
+          employmentType: '',
+          position: '',
           department: '',
           province: '',
+          phone: '',
+          email: '',
           selectedProduct: '',
           duration: ''
         });
@@ -128,10 +138,21 @@ export default function CarLeasingForm() {
             <section style={{ marginBottom: '35px', background: 'white', padding: '30px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0, 119, 153, 0.08)', border: '1px solid #f0f9f8' }}>
               <h2 style={{ color: '#007799', fontSize: '20px', fontWeight: '600', marginBottom: '20px', paddingBottom: '10px', borderBottom: '3px solid #2ca397', display: 'inline-block' }}>ข้อมูลใบสมัคร</h2>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '20px', marginTop: '20px' }}>
-                <input name="fullName" placeholder="ชื่อ-สกุล *" value={formData.fullName} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
-                <input name="phone" type="tel" placeholder="เบอร์โทรศัพท์ *" value={formData.phone} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
+                <input name="fullName" placeholder="ชื่อสกุล *" value={formData.fullName} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
+                
+                <select name="employmentType" value={formData.employmentType} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }}>
+                  <option value="">ลักษณะการจ้าง *</option>
+                  <option value="ข้าราชการ">ข้าราชการ</option>
+                  <option value="พนักงานข้าราชการ">พนักงานข้าราชการ</option>
+                  <option value="พนักงานประกันสังคม">พนักงานประกันสังคม</option>
+                  <option value="ลูกจ้างประจำ">ลูกจ้างประจำ</option>
+                </select>
+                
+                <input name="position" placeholder="ตำแหน่งงาน *" value={formData.position} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
                 <input name="department" placeholder="สังกัด *" value={formData.department} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
                 <input name="province" placeholder="จังหวัด *" value={formData.province} onChange={handleChange} required style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
+                <input name="phone" type="tel" placeholder="เบอร์ติดต่อ" value={formData.phone} onChange={handleChange} style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
+                <input name="email" type="email" placeholder="อีเมล" value={formData.email} onChange={handleChange} style={{ padding: '16px', border: '2px solid #e1f5f3', borderRadius: '8px', fontSize: '16px', width: '100%', boxSizing: 'border-box', transition: 'all 0.3s ease', backgroundColor: 'white' }} />
                 
                 <div style={{ marginTop: '10px' }}>
                   <label style={{ fontSize: '14px', color: '#007799', marginBottom: '10px', display: 'block' }}>เลือกรุ่นรถ *</label>
@@ -167,16 +188,31 @@ export default function CarLeasingForm() {
               </div>
             </section>
 
-            <button type="submit" disabled={isSubmitting} style={{
+            <section style={{ marginBottom: '35px', background: 'white', padding: '30px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0, 119, 153, 0.08)', border: '1px solid #f0f9f8' }}>
+              <label style={{ display: 'flex', alignItems: 'start', cursor: 'pointer', gap: '12px' }}>
+                <input 
+                  type="checkbox" 
+                  checked={pdpaConsent} 
+                  onChange={(e) => setPdpaConsent(e.target.checked)}
+                  required
+                  style={{ marginTop: '4px', width: '18px', height: '18px', cursor: 'pointer' }}
+                />
+                <span style={{ fontSize: '14px', lineHeight: '1.6', color: '#555' }}>
+                  ข้าพเจ้ายินยอมให้บริษัทฯ เก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคลของข้าพเจ้า เพื่อวัตถุประสงค์ในการพิจารณาสินเชื่อเช่าซื้อรถยนต์ และการติดต่อสื่อสารที่เกี่ยวข้อง ตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 *
+                </span>
+              </label>
+            </section>
+
+            <button type="submit" disabled={isSubmitting || !pdpaConsent} style={{
               width: '100%',
               padding: '18px',
-              background: isSubmitting ? '#ccc' : 'linear-gradient(135deg, #2ca397 0%, #007799 100%)',
+              background: (isSubmitting || !pdpaConsent) ? '#ccc' : 'linear-gradient(135deg, #2ca397 0%, #007799 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '12px',
               fontSize: '18px',
               fontWeight: '600',
-              cursor: isSubmitting ? 'wait' : 'pointer',
+              cursor: (isSubmitting || !pdpaConsent) ? 'not-allowed' : 'pointer',
               marginTop: '30px',
               boxShadow: '0 4px 15px rgba(44, 163, 151, 0.3)',
               transition: 'all 0.3s ease',

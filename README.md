@@ -67,12 +67,18 @@ gcloud run deploy car-leasing-form --image gcr.io/PROJECT_ID/car-leasing-form --
 ## Database Schema
 
 ตารางหลัก: `car_lease_applications`
-- ข้อมูลส่วนตัว (ชื่อ, เบอร์โทร, อีเมล)
-- ที่อยู่
-- ข้อมูลการทำงาน
-- ข้อมูลรถยนต์
-- ข้อมูลทางการเงิน
-- บุคคลอ้างอิง
+- ลำดับ (auto-generated)
+- วันที่ส่ง (auto-generated)
+- เวลาที่ส่ง (auto-generated)
+- ชื่อสกุล
+- ลักษณะการจ้าง (ข้าราชการ, พนักงานข้าราชการ, พนักงานประกันสังคม, ลูกจ้างประจำ)
+- ตำแหน่งงาน
+- สังกัด
+- จังหวัด
+- เบอร์ติดต่อ (optional)
+- อีเมล (optional)
+- รุ่นรถ
+- ระยะเวลา
 
 ## Tech Stack
 - Next.js 14

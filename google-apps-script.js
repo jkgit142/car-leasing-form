@@ -21,7 +21,7 @@ function clearAndSetupSheet() {
     }
     
     // เขียน header ใหม่
-    const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อ-สกุล', 'เบอร์โทร', 'สังกัด', 'จังหวัด', 'รุ่นรถ', 'ระยะเวลา'];
+    const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อสกุล', 'ลักษณะการจ้าง', 'ตำแหน่งงาน', 'สังกัด', 'จังหวัด', 'เบอร์ติดต่อ', 'อีเมล', 'รุ่นรถ', 'ระยะเวลา'];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     
     // จัดรูปแบบ header
@@ -62,7 +62,7 @@ function doGet(e) {
       console.log('Creating new sheet');
       sheet = spreadsheet.insertSheet('registration');
       // เพิ่ม header
-      const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อ-สกุล', 'เบอร์โทร', 'สังกัด', 'จังหวัด', 'รุ่นรถ', 'ระยะเวลา'];
+      const headers = ['ลำดับ', 'วันที่ส่ง', 'เวลาที่ส่ง', 'ชื่อสกุล', 'ลักษณะการจ้าง', 'ตำแหน่งงาน', 'สังกัด', 'จังหวัด', 'เบอร์ติดต่อ', 'อีเมล', 'รุ่นรถ', 'ระยะเวลา'];
       sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
       console.log('Header added');
     }
@@ -80,9 +80,12 @@ function doGet(e) {
     console.log('Date:', dateStr, 'Time:', timeStr);
     console.log('Parameters details:');
     console.log('- fullName:', params.fullName);
-    console.log('- phone:', params.phone);
+    console.log('- employmentType:', params.employmentType);
+    console.log('- position:', params.position);
     console.log('- department:', params.department);
     console.log('- province:', params.province);
+    console.log('- phone:', params.phone);
+    console.log('- email:', params.email);
     console.log('- selectedProduct:', params.selectedProduct);
     console.log('- duration:', params.duration);
     
@@ -92,9 +95,12 @@ function doGet(e) {
       dateStr,
       timeStr,
       params.fullName || '',
-      params.phone || '',
+      params.employmentType || '',
+      params.position || '',
       params.department || '',
       params.province || '',
+      params.phone || '',
+      params.email || '',
       params.selectedProduct || '',
       (params.duration ? params.duration + ' ปี' : '')
     ];
